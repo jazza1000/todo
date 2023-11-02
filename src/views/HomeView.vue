@@ -4,6 +4,6 @@
 
 <template>
   <main>
-    some content here
+    some content  a
   </main>
 </template>
