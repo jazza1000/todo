@@ -1,18 +1,23 @@
 <script setup lang="ts">
     import { reactive } from 'vue'
-    import { type User, users } from '@/model/User'
+    import { type User } from '@/model/User'
+    import { useAuthStore } from '@/store/auth.js'
+    import router from '@/router'
+
+    const { isAuthenticated, authenticateUser } = useAuthStore();
 
     const user = reactive<User>({
         username: "",
         password: ""
     })
 
-    function authenticateUser(){
-        if (users.filter(u => u.username == user.username && u.password == user.password).length) {
-            console.log("Authenticated")
-            }
+    function login(){
+        authenticateUser(user)
+        console.log(isAuthenticated)
+        if (isAuthenticated){
+            router.push("/")
         }
-
+    }
 </script>
 
 <template>
@@ -20,8 +25,9 @@
         <input v-model="user.username" placeholder="Username"/>
         <input v-model="user.password" placeholder="Password" type="password"/>
         <button
-            @click="authenticateUser()">
+            @click="login()">
             Submit
         </button>
     </div>
 </template>
+@/store/auth

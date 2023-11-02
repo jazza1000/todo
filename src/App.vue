@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-
+  import { RouterLink, RouterView } from 'vue-router'
+  import { useAuthStore } from './store/auth';
 </script>
 
 <template>
@@ -12,6 +12,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
         <RouterLink to="/login">Login</RouterLink>
+        
       </nav>
     </div>
   </header>
