@@ -4,7 +4,7 @@
     import { useAuthStore } from '@/store/auth.js'
     import router from '@/router'
 
-    const { isAuthenticated, authenticateUser } = useAuthStore();
+    const { authenticateUser } = useAuthStore();
 
     const user = reactive<User>({
         username: "",
@@ -12,9 +12,8 @@
     })
 
     function login(){
-        authenticateUser(user)
-        console.log(isAuthenticated)
-        if (isAuthenticated){
+        console.log("trying to login")
+        if (authenticateUser(user)){
             router.push("/")
         }
     }
