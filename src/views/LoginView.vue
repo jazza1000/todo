@@ -1,14 +1,14 @@
 <script setup lang="ts">
     import { reactive, ref } from 'vue'
     import { storeToRefs } from 'pinia';
-    import { type User } from '@/model/User'
+    import { type UserAuthData } from '@/model/User'
     import { useAuthStore } from '@/store/auth.js'
     import router from '@/router'
 
     const { authenticateUser } = useAuthStore();
     const { isAuthenticated } = storeToRefs(useAuthStore());
 
-    const user = reactive<User>({
+    const user = reactive<UserAuthData>({
         username: "",
         password: ""
     })
