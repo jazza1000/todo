@@ -4,11 +4,11 @@
   import { useAuthStore } from './store/auth';
   import router from '@/router'
 
-  const { clearAuthenticatedUser } = useAuthStore();
-  const { isAuthenticated, authenticatedUser } = storeToRefs(useAuthStore());
+  const authStore = useAuthStore();
+  const { isAuthenticated, authenticatedUser } = storeToRefs(authStore);
 
   function logout() {
-    clearAuthenticatedUser()
+    authStore.clearAuthenticatedUser()
     router.push('/login')
   }
 
@@ -24,7 +24,7 @@
         <RouterLink to="/about">About</RouterLink>
 
         <div v-if="isAuthenticated">
-          Hello, {{ authenticatedUser }}!
+          Hello, {{ authenticatedUser.username }}!
           <button @click="logout">Logout</button>
         </div>
         <div v-else>

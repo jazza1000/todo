@@ -1,31 +1,22 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { type UserAuthData } from '@/model/User';
+import { type UserAuthData } from '@/types/UserAuthData';
+import { users } from '@/model'
 
 export const useAuthStore = defineStore('auth', () => {
-    const authenticatedUser = ref<string | null>(null);
+    const authenticatedUser = ref<User | null>(null);
     const isAuthenticated = computed(() => {
         return authenticatedUser.value !== null;
     });
 
-    const users: UserAuthData[] = [
-        {
-            username: "spiderBob",
-            password: "password123"
-        },
-        {
-            username: "arachnidRobert",
-            password: "password321"
-        },
-        {
-            username: "a",
-            password: "a"
-        },
-    ]
+    const usersData = users.data;
 
-    function authenticateUser(user: UserAuthData) {
-        if (users.filter(u => u.username == user.username && u.password == user.password).length) {
-            authenticatedUser.value = user.username
+    async function setAuthenticatedUser(userAuthData: UserAuthData) {
+        const user = usersData.find(u => u.username == userAuthData.username && u.password == userAuthData.password)
+        if (user) {
+            authenticatedUser.value = {
+                username: user.username
+            }
         }
     }
 
@@ -33,10 +24,15 @@ export const useAuthStore = defineStore('auth', () => {
         authenticatedUser.value = null
     }
 
+    function getUsers(): User[] {
+        return usersData.map(u => new { username: u.username })
+    }
+
     return {
         authenticatedUser,
         isAuthenticated,
-        authenticateUser,
-        clearAuthenticatedUser
+        setAuthenticatedUser,
+        clearAuthenticatedUser,
+        getUsers
       };
 })
