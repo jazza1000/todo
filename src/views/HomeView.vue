@@ -1,9 +1,12 @@
 <script setup lang="ts">  
   import { computed, ref, watch } from 'vue';
-  import {tasks} from '../model/'
+  import { useTaskStore } from '@/store/task';
+  import { storeToRefs } from 'pinia';
 
+  const taskStore = useTaskStore()
+  const { tasks } = storeToRefs(taskStore)
 
-  let tasklist = tasks.data
+  let tasklist = tasks.value
   const now = new Date();
   const future = new Date()
   future.setDate(future.getDate()+7);
@@ -13,12 +16,12 @@
   const dateTo = ref(future.toISOString().slice(0,16));
 
   const totalTasks = computed(()=>{
-    return tasklist.length;
+    return tasks.value.length;
   })
 
   watch(search, async (textBefore, textAfter)=>{
 
-      tasklist = tasks.data.filter((x=>x.description.includes(textBefore)));
+      tasklist = tasks.value.filter((x=>x.description.includes(textBefore)));
   }
   );
 

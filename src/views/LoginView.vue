@@ -3,9 +3,11 @@
     import { storeToRefs } from 'pinia';
     import { type UserAuthData } from '@/types/UserAuthData.js'
     import { useAuthStore } from '@/store/auth.js'
+    import { useTaskStore } from '@/store/task.js'
     import router from '@/router'
 
     const authStore = useAuthStore();
+    const taskStore = useTaskStore();
     const { isAuthenticated } = storeToRefs(authStore);
 
     const user = reactive<UserAuthData>({

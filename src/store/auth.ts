@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { type UserAuthData } from '@/types/UserAuthData';
-import { users } from '@/model'
+import { usersData } from '@/model'
 
 export const useAuthStore = defineStore('auth', () => {
     const authenticatedUser = ref<User | null>(null);
@@ -9,10 +9,10 @@ export const useAuthStore = defineStore('auth', () => {
         return authenticatedUser.value !== null;
     });
 
-    const usersData = users.data;
+    const users = usersData.data;
 
     async function setAuthenticatedUser(userAuthData: UserAuthData) {
-        const user = usersData.find(u => u.username == userAuthData.username && u.password == userAuthData.password)
+        const user = users.find(u => u.username == userAuthData.username && u.password == userAuthData.password)
         if (user) {
             authenticatedUser.value = {
                 username: user.username
@@ -24,15 +24,11 @@ export const useAuthStore = defineStore('auth', () => {
         authenticatedUser.value = null
     }
 
-    function getUsers(): User[] {
-        return usersData.map(u => new { username: u.username })
-    }
 
     return {
         authenticatedUser,
         isAuthenticated,
         setAuthenticatedUser,
         clearAuthenticatedUser,
-        getUsers
       };
 })

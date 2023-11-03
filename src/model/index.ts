@@ -1,2 +1,2 @@
-export {default as tasks} from './tasks.json';
-export {default as users} from './users.json';
+export {default as tasksData} from './tasks.json';
+export {default as usersData} from './users.json';
