@@ -1,5 +1,16 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+  import { RouterLink, RouterView } from 'vue-router'
+  import { storeToRefs } from 'pinia';
+  import { useAuthStore } from './store/auth';
+  import router from '@/router'
+
+  const authStore = useAuthStore();
+  const { isAuthenticated, authenticatedUser } = storeToRefs(authStore);
+
+  function logout() {
+    authStore.clearAuthenticatedUser()
+    router.push('/login')
+  }
 
 </script>
 
@@ -11,6 +22,14 @@ import { RouterLink, RouterView } from 'vue-router'
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+
+        <div v-if="isAuthenticated">
+          Hello, {{ authenticatedUser.username }}!
+          <button @click="logout">Logout</button>
+        </div>
+        <div v-else>
+          <RouterLink to="/login">Login</RouterLink>
+        </div>
       </nav>
     </div>
   </header>
