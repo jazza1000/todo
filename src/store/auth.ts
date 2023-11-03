@@ -8,7 +8,7 @@ export const useAuthStore = defineStore('auth', () => {
         return authenticatedUser.value !== null;
     });
 
-    const users: Array<User> = [
+    const users: User[] = [
         {
             username: "spiderBob",
             password: "password123"
@@ -17,20 +17,26 @@ export const useAuthStore = defineStore('auth', () => {
             username: "arachnidRobert",
             password: "password321"
         },
+        {
+            username: "a",
+            password: "a"
+        },
     ]
 
-    function authenticateUser(user: User): boolean {
-        console.log("authenticating user")
+    function authenticateUser(user: User) {
         if (users.filter(u => u.username == user.username && u.password == user.password).length) {
             authenticatedUser.value = user.username
-            return true;
         }
-        return false;
+    }
+
+    function clearAuthenticatedUser() {
+        authenticatedUser.value = null
     }
 
     return {
         authenticatedUser,
         isAuthenticated,
-        authenticateUser
+        authenticateUser,
+        clearAuthenticatedUser
       };
 })

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-    import { reactive } from 'vue'
+    import { reactive, ref } from 'vue'
+    import { storeToRefs } from 'pinia';
     import { type User } from '@/model/User'
     import { useAuthStore } from '@/store/auth.js'
     import router from '@/router'
 
     const { authenticateUser } = useAuthStore();
+    const { isAuthenticated } = storeToRefs(useAuthStore());
 
     const user = reactive<User>({
         username: "",
@@ -12,8 +14,8 @@
     })
 
     function login(){
-        console.log("trying to login")
-        if (authenticateUser(user)){
+        authenticateUser(user)
+        if (isAuthenticated){
             router.push("/")
         }
     }
