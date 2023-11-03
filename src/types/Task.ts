@@ -1,7 +1,7 @@
 export default interface Task {
     id: number;
     title: string;
-    descripton: string;
+    description: string;
     assigned: string;
     dueDate: Date;
     completedDate: Date;

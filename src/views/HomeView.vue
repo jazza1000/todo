@@ -70,7 +70,13 @@
             <td>{{task.assigned}}</td>
             <td>{{task.dueDate}}</td>
             <td>{{task.completedDate}}</td>
-            <td><a href="#">edit</a> <a href="#">delete</a></td>
+            <td>
+              <router-link 
+                :to="{ name: 'tasks', params: { taskId: task.id }}"
+                >
+                  Edit
+              </router-link> 
+              <a href="#">delete</a></td>
           </tr>
         </tbody>
       </table>
