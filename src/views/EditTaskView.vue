@@ -2,13 +2,19 @@
     import type Task from '@/types/Task'
     import TaskForm from '@/components/forms/TaskForm.vue';
     import { useTaskStore } from '@/store/task';
+    import router from '@/router'
+
     const props = defineProps<{
         taskId: number
     }>()
 
-    console.log(props.taskId)
     const taskStore = useTaskStore()
     const task = taskStore.tasks.find(t => t.id === props.taskId) 
+
+    function updateTask(updatedTask: Task){
+        taskStore.replaceTask(updatedTask)
+        router.push('/')
+    }
 </script>
 
 <template>
@@ -16,10 +22,11 @@
     <div v-if="task" >
         <TaskForm 
             :task="task" 
-            :update-callback="taskStore.replaceTask" />
+            @submit="updateTask"
+            />
     </div>
 
     <div v-else>
-        Task not found
+        Task {{ props.taskId }} not found
     </div>
 </template>

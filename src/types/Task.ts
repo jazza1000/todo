@@ -3,6 +3,6 @@ export default interface Task {
     title: string;
     description: string;
     assigned: string;
-    dueDate: Date;
-    completedDate: Date;
+    dueDate?: Date | null;
+    completedDate?: Date | null;
 }

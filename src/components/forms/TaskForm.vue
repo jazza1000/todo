@@ -1,19 +1,30 @@
 <script setup lang="ts">
-    import type Task from '@/types/Task';
     import { reactive } from 'vue';
+    import type Task from '@/types/Task';
 
     const props = defineProps<{
         task: Task
-        updateCallback: (task: Task) => void; 
     }>()
 
-    const task = reactive<Task>(props.task)
-    console.log(task)
+    const task = reactive<Task>(
+        props.task
+    )
+
+    const emit = defineEmits(['submit']);
+
+    function handleSubmit() {
+        emit("submit", task)
+    }
+
 </script>
 
 <template>
     <label>Title</label>
-    <input :value="task.title" placeholder="Title">
+    <input v-model="task.title" placeholder="Title">
     <label>Description</label>
-    <input :value="task.description">
+    <input v-model="task.description">
+    <button 
+        @click="handleSubmit">
+            Submit
+        </button>
 </template>
