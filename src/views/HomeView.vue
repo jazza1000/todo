@@ -1,11 +1,16 @@
 <script setup lang="ts">  
   import { computed, ref, watch } from 'vue';
-  import {tasks} from '../model/'
+  import { useTaskStore } from '@/store/task';
+  import { storeToRefs } from 'pinia';
+
+
+  const taskStore = useTaskStore()
+  const { tasks } = storeToRefs(taskStore)
 
   const pageSize = ref(10);
-  const filteredTasks =ref(tasks.data);
+  const filteredTasks =ref(tasks);
   let tasklist = pageTasks(1,pageSize.value);
-  let allTasks = tasks.data;
+  let allTasks = tasks;
   let currentPage =ref(1);
   const now = new Date();
   const future = new Date()
@@ -31,14 +36,14 @@
 
   /*watch(search, async (textBefore, textAfter)=>{
 
-      tasklist = tasks.data.filter((x=>x.description.includes(textBefore)));
+      tasklist = tasks.value.filter((x=>x.description.includes(textBefore)));
   }
   );*/
 
   watch ([search,pageSize, currentPage],([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
     //apply filter first
-    filteredTasks.value = tasks.data.filter((x=>x.description.includes(newSearch)));
+    filteredTasks.value = tasks.value.filter((x=>x.description?.includes(newSearch)));
     //then apply paging
     tasklist = pageTasks(newCurrentPage,newPageSize);
 
@@ -47,7 +52,6 @@
 
  function pageTasks (page:number, pageSize:number)
  {
-
     let endIndex= Math.min(page*pageSize, filteredTasks.value.length);
     return filteredTasks.value.slice(Math.max(endIndex-pageSize,0),endIndex)
  }
@@ -109,7 +113,13 @@
             <td>{{task.assigned}}</td>
             <td>{{task.dueDate}}</td>
             <td>{{task.completedDate}}</td>
-            <td><a href="#">edit</a> <a href="#">delete</a></td>
+            <td>
+              <router-link 
+                :to="{ name: 'tasks', params: { taskId: task.id }}"
+                >
+                  Edit
+              </router-link> 
+              <a href="#">delete</a></td>
           </tr>
         </tbody>
       </table>

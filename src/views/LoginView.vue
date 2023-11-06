@@ -31,4 +31,3 @@
         </button>
     </div>
 </template>
-@/store/auth@/model/UserAuthData
