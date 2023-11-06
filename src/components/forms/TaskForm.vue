@@ -26,5 +26,5 @@
     <button 
         @click="handleSubmit">
             Submit
-        </button>
+    </button>
 </template>

@@ -1,8 +1,8 @@
 export default interface Task {
     id: number;
-    title: string;
-    description: string;
-    assigned: string;
-    dueDate?: Date | null;
-    completedDate?: Date | null;
+    title: string | null;
+    description: string | null;
+    assigned: string | null;
+    dueDate?: string | null;
+    completedDate?: string | null;
 }

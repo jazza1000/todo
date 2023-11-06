@@ -43,7 +43,7 @@
   watch ([search,pageSize, currentPage],([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
     //apply filter first
-    filteredTasks.value = tasks.value.filter((x=>x.description.includes(newSearch)));
+    filteredTasks.value = tasks.value.filter((x=>x.description?.includes(newSearch)));
     //then apply paging
     tasklist = pageTasks(newCurrentPage,newPageSize);
 
