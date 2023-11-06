@@ -3,10 +3,15 @@
   import { useTaskStore } from '@/store/task';
   import { storeToRefs } from 'pinia';
 
+
   const taskStore = useTaskStore()
   const { tasks } = storeToRefs(taskStore)
 
-  let tasklist = tasks.value
+  const pageSize = ref(10);
+  const filteredTasks =ref(tasks);
+  let tasklist = pageTasks(1,pageSize.value);
+  let allTasks = tasks;
+  let currentPage =ref(1);
   const now = new Date();
   const future = new Date()
   future.setDate(future.getDate()+7);
@@ -16,14 +21,52 @@
   const dateTo = ref(future.toISOString().slice(0,16));
 
   const totalTasks = computed(()=>{
-    return tasks.value.length;
+    return filteredTasks.value.length;
   })
 
-  watch(search, async (textBefore, textAfter)=>{
+  const totalPages = computed(()=>{
+    return Math.ceil( filteredTasks.value.length/ pageSize.value);
+  }
+  )
+  
+  //const pagedList= computed(()=>{
+  //  return pageTasks(currentPage,pageSize.value);
+  //})
+
+
+  /*watch(search, async (textBefore, textAfter)=>{
 
       tasklist = tasks.value.filter((x=>x.description.includes(textBefore)));
   }
-  );
+  );*/
+
+  watch ([search,pageSize, currentPage],([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
+
+    //apply filter first
+    filteredTasks.value = tasks.value.filter((x=>x.description.includes(newSearch)));
+    //then apply paging
+    tasklist = pageTasks(newCurrentPage,newPageSize);
+
+    
+  })
+
+ function pageTasks (page:number, pageSize:number)
+ {
+    let endIndex= Math.min(page*pageSize, filteredTasks.value.length);
+    return filteredTasks.value.slice(Math.max(endIndex-pageSize,0),endIndex)
+ }
+
+ function nextPage()
+ {
+    if (currentPage.value<totalPages.value)
+        currentPage.value = currentPage.value+1;
+ }
+
+ function prevPage()
+ {
+  if (currentPage.value>1)
+    currentPage.value = currentPage.value-1;
+ }
 
 </script>
 
@@ -41,13 +84,13 @@
 
     <div class="table">
       <h3>Total Tasks: {{ totalTasks }}</h3>
-      Page x of y
-      <button>prev</button>
-      <button>next</button>
-      Tasks per page <select>
-          <option value="5">5</option>
+      Page{{ currentPage }} of {{ totalPages }}
+      <button @click="prevPage">prev</button>
+      <button @click="nextPage">next</button>
+      Tasks per page <select v-model="pageSize" >
           <option value="10">10</option>
-          <option value="10">20</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
       </select>
       <table>
         <thead>
