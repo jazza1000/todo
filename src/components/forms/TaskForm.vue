@@ -19,31 +19,85 @@
     function handleSubmit() {
         emit("submit", task)
     }
-
-    console.log(props.permissions.dueDate)
-    console.log(props.permissions.completedDate)
 </script>
 
 <template>
-    <label>Title</label>
-    <input v-model="task.title" placeholder="Title">
+    <form>
+        <label>Title</label>
+        <input v-model="task.title" placeholder="Title">
 
-    <label>Description</label>
-    <input v-model="task.description">
+        <label>Description</label>
+        <textarea 
+            placeholder="Description"
+            rows="10"
+            v-model="task.description"></textarea>
 
-    <label>Assignee</label>
-    <select v-model="task.assigned">
-        <option v-for="user in users" :key="user.username" :value="user.username">{{ user.username }}</option>
-    </select>
+        <label>Assignee</label>
+        <select v-model="task.assigned">
+            <option 
+                value=null
+                :selected="task.assigned === null"
+            >
+                Unassigned
+            </option>
+            <option v-for="user in users" 
+                :key="user.username" 
+                :value="user.username"
+                :selected="task.assigned === user.username"
+            >
+                {{ user.username }}
+            </option>
+        </select>
 
-    <label>Due Date</label>
-    <input type="datetime-local" v-model="task.dueDate" :disabled="!props.permissions.dueDate"/>
+        <label>Due Date</label>
+        <input 
+            class="date-input"
+            type="date" 
+            v-model="task.dueDate"
+            :disabled="!props.permissions.dueDate"/>
 
-    <label>Completed Date</label>
-    <input type="datetime-local" v-model="task.completedDate" :disabled="!props.permissions.completedDate"/>
+        <label>Completed Date</label>
+        <input 
+            class="date-input"
+            type="date"
+            v-model="task.completedDate"
+            :disabled="!props.permissions.completedDate"/>
 
-    <button 
-        @click="handleSubmit">
+        <button 
+            type="button"
+            @click="handleSubmit"
+        >
             Submit
-    </button>
+        </button>
+    </form>
 </template>
+
+<style scoped>
+    form {
+        width: 60vw;
+        display: flex;
+        flex-direction: column;
+    }
+
+    select {
+        width: fit-content;
+        margin-bottom: 1em;
+    }
+    
+    input {
+        margin-bottom: 1em;
+    }
+
+    textarea {
+        margin-bottom: 1em;
+    }
+
+    .date-input {
+        width: fit-content;
+    }
+
+    button {
+
+        width: 5em;
+    }
+</style>
