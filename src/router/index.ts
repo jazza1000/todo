@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import EditTaskView from '../views/EditTaskView.vue'
+import CreateTaskView from '../views/CreateTaskView.vue'
 import { useAuthStore } from '../store/auth'
 
 const router = createRouter({
@@ -22,11 +23,16 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
+      path: '/tasks/create',
+      name: 'createTask',
+      component: CreateTaskView,
+    },
+    {
       path: '/tasks/:taskId',
-      name: 'tasks',
+      name: 'editTask',
       component: EditTaskView,
       props: route => ({ taskId: parseInt(route.params.taskId) })
-    }
+    },
   ]
 })
 

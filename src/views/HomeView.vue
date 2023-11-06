@@ -82,6 +82,10 @@
       </div>
     </div>
 
+    <router-link :to="{name: 'createTask'}">
+      Create Task
+    </router-link> 
+
     <div class="table">
       <h3>Total Tasks: {{ totalTasks }}</h3>
       Page{{ currentPage }} of {{ totalPages }}
@@ -115,7 +119,7 @@
             <td>{{task.completedDate}}</td>
             <td>
               <router-link 
-                :to="{ name: 'tasks', params: { taskId: task.id }}"
+                :to="{ name: 'editTask', params: { taskId: task.id }}"
                 >
                   Edit
               </router-link> 

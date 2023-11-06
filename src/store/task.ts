@@ -5,6 +5,7 @@ import { tasksData } from '@/model'
 
 export const useTaskStore = defineStore('task', () => {
     const tasks = ref<Task[]>( tasksData.data );
+    const nextId = tasksData.data.reduce((prev, current) => (prev && prev.id > current.id) ? prev : current).id
 
     function addTask(task: Task){
         tasks.value.push(task)
@@ -19,6 +20,7 @@ export const useTaskStore = defineStore('task', () => {
 
     return {
         tasks,
+        nextId,
         addTask,
         replaceTask
       };

@@ -24,7 +24,7 @@
         <RouterLink to="/about">About</RouterLink>
 
         <div v-if="isAuthenticated">
-          Hello, {{ authenticatedUser.username }}!
+          Hello, {{ authenticatedUser!.username }}!
           <button @click="logout">Logout</button>
         </div>
         <div v-else>
