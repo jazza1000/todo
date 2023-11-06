@@ -13,21 +13,52 @@
         password: ""
     })
 
-    function login(){
+    const validationErrors = ref<string[]>([])
+
+    function handleSubmit() {
+        validateForm();
+        if (validationErrors.value.length) return;
+        
         authStore.setAuthenticatedUser(user)
-        if (isAuthenticated){
+        if (isAuthenticated.value){
             router.push("/")
         }
+        else {
+            validationErrors.value.push("Username or password is incorrect")
+        }
     }
+
+    function validateForm() {
+        validationErrors.value = [];
+        if (!user.username) {
+            validationErrors.value.push("Please enter a username")
+        }
+        if (!user.password) {
+            validationErrors.value.push("Please enter a password")
+        }
+    }
+
 </script>
 
 <template>
-    <div>
+    <form>
         <input v-model="user.username" placeholder="Username"/>
         <input v-model="user.password" placeholder="Password" type="password"/>
+        <div v-for="error in validationErrors">
+            {{ error }}
+        </div>
         <button
-            @click="login()">
+            type="button"
+            @click="handleSubmit"
+        >
             Submit
         </button>
-    </div>
+    </form>
 </template>
+
+<style scoped>
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
