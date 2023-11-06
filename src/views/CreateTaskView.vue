@@ -24,5 +24,4 @@
         :task="task" 
         @submit="createTask"
         />
-
 </template>
