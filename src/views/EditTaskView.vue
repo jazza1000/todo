@@ -34,7 +34,7 @@
             :users="users"
             :permissions="permissions"
             @submit="updateTask"
-            />
+        />
     </div>
 
     <div v-else>
