@@ -2,9 +2,21 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import type Task from '@/types/Task';
 import { tasksData } from '@/model'
+import { stringToDate } from '@/mappers/date';
 
 export const useTaskStore = defineStore('task', () => {
-    const tasks = ref<Task[]>( tasksData.data );
+    const tasksArray: Task[] = tasksData.data.map(t => {
+        return {
+            id: t.id,
+            title: t.title,
+            description: t.description,
+            assigned: t.assigned,
+            dueDate: stringToDate(t.dueDate),
+            completedDate: stringToDate(t.completedDate)
+        }
+    });
+
+    const tasks = ref<Task[]>(tasksArray)
     const nextId = ref<number>(tasksData.data.reduce((prev, current) => (prev && prev.id > current.id) ? prev : current).id + 1)
 
     function addTask(task: Task){
