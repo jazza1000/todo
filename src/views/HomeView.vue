@@ -95,18 +95,16 @@
     }
   }
 
-function parseDMY(value) {
-    var date = value.split("/");
-    var d = parseInt(date[0], 10),
-        m = parseInt(date[1], 10),
-        y = parseInt(date[2], 10);
-    return new Date(y, m - 1, d);
-}
-
  function pageTasks (page:number, pageSize:number)
  {
     let endIndex= Math.min(page*pageSize, filteredTasks.value.length);
-    return filteredTasks.value.slice(Math.max(endIndex-pageSize,0),endIndex)
+    let startIndex = (page - 1) * pageSize
+    return filteredTasks.value.slice(startIndex, endIndex)
+ }
+
+ function firstPage()
+ {
+    currentPage.value = 1;
  }
 
  function nextPage()
@@ -119,6 +117,11 @@ function parseDMY(value) {
  {
   if (currentPage.value>1)
     currentPage.value = currentPage.value-1;
+ }
+
+ function lastPage()
+ {
+    currentPage.value = totalPages.value
  }
 
 </script>
@@ -143,8 +146,10 @@ function parseDMY(value) {
     <div class="table">
       <h3>Total Tasks: {{ totalTasks }}</h3>
       Page {{ currentPage }} of {{ totalPages }}
+      <button @click="firstPage">first</button>
       <button @click="prevPage">prev</button>
       <button @click="nextPage">next</button>
+      <button @click="lastPage">last</button>
       Tasks per page <select v-model="pageSize" >
           <option value="10">10</option>
           <option value="20">20</option>
