@@ -9,12 +9,16 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
 
     const taskStore = useTaskStore()
     const { tasks } = storeToRefs(taskStore)
-    const filteredTasks = ref(tasks.value.map(obj=>({...obj}))); //note need to copy to new array
+    console.log("tasks", tasks.value.length)
+    const filteredTasks = ref(tasks); 
+    const displayedTasks = ref(filteredTasks.value.map(obj=>({...obj}))); //note need to copy to new array
+
+    console.log("filtered tasks", filteredTasks.value.length)
     function setFilteredTasks(newFilteredTasks: Task[]) {
-        filteredTasks.value = newFilteredTasks
+        console.log("new filtered tasks", newFilteredTasks.length)
+        displayedTasks.value = newFilteredTasks
     }
 
-    const displayedTasks = ref(filteredTasks.value.map(obj=>({...obj}))); //note need to copy to new array
     function setDisplayedTasks(newDisplayedTasks: Task[]) {
         displayedTasks.value = newDisplayedTasks
     }
@@ -27,7 +31,7 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
     </router-link> 
 
     <Paginator
-        :content="displayedTasks"
+        :content="filteredTasks"
         @paginated="setDisplayedTasks"
     >
         <TaskFilterer
@@ -49,7 +53,7 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
             </thead>
             <tbody>
             <tr 
-                v-for="task in filteredTasks"
+                v-for="task in displayedTasks"
                 :key="task.id"
             >
                 <td>{{task.title}}</td>
