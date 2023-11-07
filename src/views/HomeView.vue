@@ -5,17 +5,18 @@
   import { dateToISOString } from '@/mappers/date';
 
 
+
   const taskStore = useTaskStore()
   const { tasks } = storeToRefs(taskStore)
 
   const pageSize = ref(10);
-  const filteredTasks =ref(tasks);
+  const filteredTasks =ref(tasks.value.map(obj=>({...obj}))); //note need to copy to new array
   let tasklist = pageTasks(1,pageSize.value);
   let allTasks = tasks;
   let currentPage =ref(1);
   const now = new Date();
   const future = new Date()
-  future.setDate(future.getDate()+7);
+  future.setDate(future.getDate()+30);
 
   const search = ref('')
   const dateFrom =ref(dateToISOString(now))
@@ -41,15 +42,39 @@
   }
   );*/
 
-  watch ([search,pageSize, currentPage],([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
+  watch ([search,pageSize, currentPage],async ([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
     //apply filter first
-    filteredTasks.value = tasks.value.filter((x=>x.description?.includes(newSearch)));
+    //todo: make the searchable fields parameterised
+
+
+    filteredTasks.value = tasks.value.filter(x=>
+      (x.description.includes(newSearch) || x.title.includes(newSearch))      
+    //  && ( x.dueDate?.length==8 && parseDMY(x.dueDate) > new Date (dateFrom.value))
+    //   &&( Date.parse(x.dueDate) < Date.parse(dateTo.value)       )
+      )
+    //  alert(tasks.value.length);
+//&& Date.parse(x.dueDate) > Date.parse(dateFrom.value)
+    if (newCurrentPage !== preCurrentPage){
+
     //then apply paging
-    tasklist = pageTasks(newCurrentPage,newPageSize);
+      tasklist = pageTasks(newCurrentPage,newPageSize);
+    }
+    else {
+      currentPage.value=1;
+      tasklist = pageTasks(1,newPageSize);
+    }
 
     
   })
+
+function parseDMY(value) {
+    var date = value.split("/");
+    var d = parseInt(date[0], 10),
+        m = parseInt(date[1], 10),
+        y = parseInt(date[2], 10);
+    return new Date(y, m - 1, d);
+}
 
  function pageTasks (page:number, pageSize:number)
  {
@@ -89,7 +114,7 @@
 
     <div class="table">
       <h3>Total Tasks: {{ totalTasks }}</h3>
-      Page{{ currentPage }} of {{ totalPages }}
+      Page {{ currentPage }} of {{ totalPages }}
       <button @click="prevPage">prev</button>
       <button @click="nextPage">next</button>
       Tasks per page <select v-model="pageSize" >
