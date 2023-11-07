@@ -2,7 +2,7 @@
   import { computed, ref, watch } from 'vue';
   import { useTaskStore } from '@/store/task';
   import { storeToRefs } from 'pinia';
-  import { dateToISOString } from '@/mappers/date';
+  import { dateToISOString, stringToDate } from '@/mappers/date';
 
 
 
@@ -21,6 +21,8 @@
   const search = ref('')
   const dateFrom =ref(dateToISOString(now))
   const dateTo = ref(dateToISOString(future));
+
+  const isDateFilter = ref(false);
 
   const totalTasks = computed(()=>{
     return filteredTasks.value.length;
@@ -47,15 +49,42 @@
     //apply filter first
     //todo: make the searchable fields parameterised
 
+    // if (isDateFilter.value)
+    //   filteredTasks.value = tasks.value.filter(x=>
+    //     (x.description.includes(newSearch) || x.title.includes(newSearch))      
+    //     &&  (x.dueDate  <  stringToDate(dateTo.value) && x.dueDate > stringToDate(dateFrom.value))
+    //     )
+    // else
+    //   filteredTasks.value = tasks.value.filter(x=>
+    //     (x.description.includes(newSearch) || x.title.includes(newSearch)) )
 
-    filteredTasks.value = tasks.value.filter(x=>
-      (x.description.includes(newSearch) || x.title.includes(newSearch))      
-    //  && ( x.dueDate?.length==8 && parseDMY(x.dueDate) > new Date (dateFrom.value))
-    //   &&( Date.parse(x.dueDate) < Date.parse(dateTo.value)       )
-      )
-    //  alert(tasks.value.length);
-//&& Date.parse(x.dueDate) > Date.parse(dateFrom.value)
-    if (newCurrentPage !== preCurrentPage){
+    //   if (newCurrentPage !== preCurrentPage){
+
+    // //then apply paging
+    //   tasklist = pageTasks(newCurrentPage,newPageSize);
+    // }
+    // else {
+    //   currentPage.value=1;
+    //   tasklist = pageTasks(1,newPageSize);
+    // }
+
+    changeData(newSearch, newCurrentPage,preCurrentPage, newPageSize);
+
+    
+  })
+
+  function changeData(newSearch, newCurrentPage, preCurrentPage,  newPageSize)
+  {
+    if (isDateFilter.value)
+      filteredTasks.value = tasks.value.filter(x=>
+        (x.description.includes(newSearch) || x.title.includes(newSearch))      
+        &&  (x.dueDate  <  stringToDate(dateTo.value) && x.dueDate > stringToDate(dateFrom.value))
+        )
+    else
+      filteredTasks.value = tasks.value.filter(x=>
+        (x.description.includes(newSearch) || x.title.includes(newSearch)) )
+
+      if (newCurrentPage !== preCurrentPage){
 
     //then apply paging
       tasklist = pageTasks(newCurrentPage,newPageSize);
@@ -64,9 +93,7 @@
       currentPage.value=1;
       tasklist = pageTasks(1,newPageSize);
     }
-
-    
-  })
+  }
 
 function parseDMY(value) {
     var date = value.split("/");
@@ -105,6 +132,7 @@ function parseDMY(value) {
       <div>
         Date From: <input type="datetime-local" v-model="dateFrom" />
         Date To: <input type="datetime-local" v-model="dateTo" />
+        <input type="checkbox" v-model="isDateFilter" @change="changeData(search,currentPage,currentPage,pageSize)" />apply date filter
       </div>
     </div>
 
