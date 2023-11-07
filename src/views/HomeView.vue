@@ -2,6 +2,7 @@
   import { computed, ref, watch } from 'vue';
   import { useTaskStore } from '@/store/task';
   import { storeToRefs } from 'pinia';
+  import { dateToISOString } from '@/mappers/date';
 
 
   const taskStore = useTaskStore()
@@ -17,8 +18,8 @@
   future.setDate(future.getDate()+7);
 
   const search = ref('')
-  const dateFrom =ref(now.toISOString().slice(0,16))
-  const dateTo = ref(future.toISOString().slice(0,16));
+  const dateFrom =ref(dateToISOString(now))
+  const dateTo = ref(dateToISOString(future));
 
   const totalTasks = computed(()=>{
     return filteredTasks.value.length;
@@ -115,8 +116,8 @@
             <td>{{task.title}}</td>
             <td>{{task.description}}</td>
             <td>{{task.assigned}}</td>
-            <td>{{task.dueDate}}</td>
-            <td>{{task.completedDate}}</td>
+            <td>{{task.dueDate?.toLocaleDateString()}}</td>
+            <td>{{task.completedDate?.toLocaleDateString()}}</td>
             <td>
               <router-link 
                 :to="{ name: 'editTask', params: { taskId: task.id }}"

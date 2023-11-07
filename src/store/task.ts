@@ -4,7 +4,25 @@ import type Task from '@/types/Task';
 import { tasksData } from '@/model'
 
 export const useTaskStore = defineStore('task', () => {
-    const tasks = ref<Task[]>( tasksData.data );
+    const tasksArray: Task[] = tasksData.data.map(t => {
+        let dueDate, completedDate = null;
+        if (t.dueDate) {
+            dueDate = new Date(Date.parse(t.dueDate))
+        }
+        if (t.completedDate) {
+            completedDate = new Date(Date.parse(t.completedDate))
+        }
+        return {
+            id: t.id,
+            title: t.title,
+            description: t.description,
+            assigned: t.assigned,
+            dueDate: dueDate,
+            completedDate: completedDate
+        }
+    });
+
+    const tasks = ref<Task[]>(tasksArray)
     const nextId = ref<number>(tasksData.data.reduce((prev, current) => (prev && prev.id > current.id) ? prev : current).id + 1)
 
     function addTask(task: Task){

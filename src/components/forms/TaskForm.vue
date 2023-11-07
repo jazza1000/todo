@@ -1,8 +1,9 @@
 <script setup lang="ts">
-    import { reactive } from 'vue';
+    import { ref, reactive } from 'vue';
     import type Task from '@/types/Task';
     import type User from '@/types/User';
     import type TaskEditPermissions from '@/types/TaskEditPermissions';
+    import { dateToISOString, stringToDate } from '@/mappers/date';
 
     const props = defineProps<{
         task: Task
@@ -10,9 +11,16 @@
         permissions: TaskEditPermissions
     }>()
 
-    const task = reactive<Task>(
-        props.task
-    )
+    const dueDateString = ref<string>(dateToISOString(props.task.dueDate))
+    const completedDateString = ref<string>(dateToISOString(props.task.completedDate))
+    const task = reactive<Task>({
+        id: props.task.id,
+        title: props.task.title,
+        description: props.task.description,
+        assigned: props.task.assigned,
+        dueDate: stringToDate(dueDateString.value),
+        completedDate: stringToDate(completedDateString.value)
+    })
 
     const emit = defineEmits(['submit']);
 
@@ -36,7 +44,7 @@
         <select v-model="task.assigned">
             <option 
                 value=null
-                :selected="task.assigned === null"
+                :selected="!task.assigned"
             >
                 Unassigned
             </option>
@@ -52,15 +60,15 @@
         <label>Due Date</label>
         <input 
             class="date-input"
-            type="date" 
-            v-model="task.dueDate"
-            :disabled="!props.permissions.dueDate"/>
-
+            type="datetime-local" 
+            v-model="dueDateString"
+            :disabled="!props.permissions.dueDate"
+        />
         <label>Completed Date</label>
         <input 
             class="date-input"
-            type="date"
-            v-model="task.completedDate"
+            type="datetime-local"
+            v-model="completedDateString"
             :disabled="!props.permissions.completedDate"/>
 
         <button 
@@ -97,7 +105,6 @@
     }
 
     button {
-
         width: 5em;
     }
 </style>
