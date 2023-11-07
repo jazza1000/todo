@@ -75,6 +75,11 @@
     return filteredTasks.value.slice(startIndex, endIndex)
  }
 
+ function firstPage()
+ {
+    currentPage.value = 1;
+ }
+
  function nextPage()
  {
     if (currentPage.value<totalPages.value)
@@ -85,6 +90,11 @@
  {
   if (currentPage.value>1)
     currentPage.value = currentPage.value-1;
+ }
+
+ function lastPage()
+ {
+    currentPage.value = totalPages.value
  }
 
 </script>
@@ -108,8 +118,10 @@
     <div class="table">
       <h3>Total Tasks: {{ totalTasks }}</h3>
       Page {{ currentPage }} of {{ totalPages }}
+      <button @click="firstPage">first</button>
       <button @click="prevPage">prev</button>
       <button @click="nextPage">next</button>
+      <button @click="lastPage">last</button>
       Tasks per page <select v-model="pageSize" >
           <option value="10">10</option>
           <option value="20">20</option>
