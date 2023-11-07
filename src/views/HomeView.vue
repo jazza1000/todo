@@ -68,18 +68,11 @@
     
   })
 
-function parseDMY(value) {
-    var date = value.split("/");
-    var d = parseInt(date[0], 10),
-        m = parseInt(date[1], 10),
-        y = parseInt(date[2], 10);
-    return new Date(y, m - 1, d);
-}
-
  function pageTasks (page:number, pageSize:number)
  {
     let endIndex= Math.min(page*pageSize, filteredTasks.value.length);
-    return filteredTasks.value.slice(Math.max(endIndex-pageSize,0),endIndex)
+    let startIndex = (page - 1) * pageSize
+    return filteredTasks.value.slice(startIndex, endIndex)
  }
 
  function nextPage()
