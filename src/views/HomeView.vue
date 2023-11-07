@@ -30,10 +30,7 @@
 
   const totalPages = computed(()=>{
     return Math.ceil( filteredTasks.value.length/ pageSize.value);
-  }
-  )
-  
-
+  })
 
   watch ([search,pageSize, currentPage],async ([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
@@ -46,7 +43,7 @@
     if (isDateFilter.value)
       filteredTasks.value = tasks.value.filter(x=>
         (x.description.includes(newSearch) || x.title.includes(newSearch))      
-        &&  (x.dueDate  <  stringToDate(dateTo.value) && x.dueDate > stringToDate(dateFrom.value))
+        &&  (x.dueDate && dateTo.value && x.dueDate  <  stringToDate(dateTo.value)! && x.dueDate > stringToDate(dateFrom.value)!)
         )
     else
       filteredTasks.value = tasks.value.filter(x=>
@@ -95,6 +92,12 @@
 </script>
 
 <template>
+
+  
+
+
+
+
   <main>
     <div class="search">
       <div>
