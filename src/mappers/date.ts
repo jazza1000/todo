@@ -5,9 +5,9 @@ export function dateToISOString(date: Date | null | undefined): string {
     return "";
 }
 
-export function stringToDate(string: string): Date | null {
-    if (string) {
-        return new Date(Date.parse(string));
+export function stringToDate(str: string | null): Date | null {
+    if (str) {
+        return new Date(Date.parse(str));
     }
     return null;
 }

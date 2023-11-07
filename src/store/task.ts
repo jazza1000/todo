@@ -2,23 +2,17 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import type Task from '@/types/Task';
 import { tasksData } from '@/model'
+import { stringToDate } from '@/mappers/date';
 
 export const useTaskStore = defineStore('task', () => {
     const tasksArray: Task[] = tasksData.data.map(t => {
-        let dueDate, completedDate = null;
-        if (t.dueDate) {
-            dueDate = new Date(Date.parse(t.dueDate))
-        }
-        if (t.completedDate) {
-            completedDate = new Date(Date.parse(t.completedDate))
-        }
         return {
             id: t.id,
             title: t.title,
             description: t.description,
             assigned: t.assigned,
-            dueDate: dueDate,
-            completedDate: completedDate
+            dueDate: stringToDate(t.dueDate),
+            completedDate: stringToDate(t.completedDate)
         }
     });
 
