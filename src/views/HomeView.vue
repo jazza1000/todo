@@ -33,47 +33,15 @@
   }
   )
   
-  //const pagedList= computed(()=>{
-  //  return pageTasks(currentPage,pageSize.value);
-  //})
 
-
-  /*watch(search, async (textBefore, textAfter)=>{
-
-      tasklist = tasks.value.filter((x=>x.description.includes(textBefore)));
-  }
-  );*/
 
   watch ([search,pageSize, currentPage],async ([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
-    //apply filter first
-    //todo: make the searchable fields parameterised
-
-    // if (isDateFilter.value)
-    //   filteredTasks.value = tasks.value.filter(x=>
-    //     (x.description.includes(newSearch) || x.title.includes(newSearch))      
-    //     &&  (x.dueDate  <  stringToDate(dateTo.value) && x.dueDate > stringToDate(dateFrom.value))
-    //     )
-    // else
-    //   filteredTasks.value = tasks.value.filter(x=>
-    //     (x.description.includes(newSearch) || x.title.includes(newSearch)) )
-
-    //   if (newCurrentPage !== preCurrentPage){
-
-    // //then apply paging
-    //   tasklist = pageTasks(newCurrentPage,newPageSize);
-    // }
-    // else {
-    //   currentPage.value=1;
-    //   tasklist = pageTasks(1,newPageSize);
-    // }
-
     changeData(newSearch, newCurrentPage,preCurrentPage, newPageSize);
-
     
   })
 
-  function changeData(newSearch, newCurrentPage, preCurrentPage,  newPageSize)
+  function changeData(newSearch:string, newCurrentPage:number, preCurrentPage:number,  newPageSize:number)
   {
     if (isDateFilter.value)
       filteredTasks.value = tasks.value.filter(x=>
