@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView2 from '../views/HomeView2.vue'
 import EditTaskView from '../views/EditTaskView.vue'
 import CreateTaskView from '../views/CreateTaskView.vue'
 import { useAuthStore } from '../store/auth'
@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView2
     },
     {
       path: '/about',
