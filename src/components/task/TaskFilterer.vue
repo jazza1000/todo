@@ -18,7 +18,7 @@
     const dateTo = ref(dateToISOString(future));
     const isDateFilter = ref(false);
 
-    watch ([search],async ([newSearch])=>{
+    watch ([search, isDateFilter, dateFrom, dateTo],async ([newSearch])=>{
         changeData(newSearch);
     })
 
@@ -43,9 +43,9 @@
         Search: <input type="text" v-model="search" />
       </div>
       <div>
-        Date From: <input type="datetime-local" v-model="dateFrom" />
-        Date To: <input type="datetime-local" v-model="dateTo" />
-        <input type="checkbox" v-model="isDateFilter" @change="changeData(search)" />apply date filter
+        Date From: <input type="datetime-local" v-model="dateFrom"   />
+        Date To: <input type="datetime-local" v-model="dateTo"  />
+        <input type="checkbox" v-model="isDateFilter" />apply date filter
       </div>
     </div>
 </template>
