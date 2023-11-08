@@ -19,7 +19,7 @@
     })
 
     const startIndex = computed(()=>{
-        return Math.min((currentPage.value - 1) * pageSize.value, )
+        return (currentPage.value - 1) * pageSize.value
     })
 
     const totalItems = computed(()=>{
@@ -28,7 +28,17 @@
 
     paginate();
 
-    watch ([pageSize, currentPage, () => props.content], () => {
+    watch (pageSize, (_, oldPageSize) => {
+        let oldStartIndex = oldPageSize * (currentPage.value - 1)
+        let newPage = Math.ceil((oldStartIndex + 1) / pageSize.value);
+        currentPage.value = newPage
+    })
+
+    watch (() => props.content, () => {
+        currentPage.value = 1
+    })
+
+    watch ([currentPage, () => props.content], () => {
         paginate();
     })
 
