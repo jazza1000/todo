@@ -14,12 +14,12 @@
         return Math.max(Math.ceil( props.content.length/ pageSize.value), 1);
     })
 
-    const startIndex = computed(()=>{
-        return (currentPage.value - 1) * pageSize.value
-    })
-
     const endIndex = computed(()=>{
         return Math.min(currentPage.value * pageSize.value, props.content.length);
+    })
+
+    const startIndex = computed(()=>{
+        return Math.min((currentPage.value - 1) * pageSize.value, )
     })
 
     const totalItems = computed(()=>{
@@ -34,6 +34,9 @@
 
     function paginate ()
     {
+        if (currentPage.value > totalPages.value){
+            currentPage.value = totalPages.value
+        }
         let paginatedContent = props.content.slice(startIndex.value, endIndex.value)
         emit("paginated", paginatedContent)
     }
