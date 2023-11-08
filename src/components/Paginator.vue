@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref, toRef, watch } from 'vue';
+    import { computed, ref, watch } from 'vue';
 
     const props = defineProps<{
         content: Object[]
@@ -9,33 +9,32 @@
 
     const pageSize = ref(10);
     const currentPage = ref(1);
-    paginate(1, pageSize.value);
-
-    const contentCount = computed(()=>{
-        return props.content.length;
-    })
 
     const totalPages = computed(()=>{
         return Math.ceil( props.content.length/ pageSize.value);
     })
 
-    const totalTasks = computed(()=>{
+    const startIndex = computed(()=>{
+        return (currentPage.value - 1) * pageSize.value
+    })
+
+    const endIndex = computed(()=>{
+        return Math.min(currentPage.value * pageSize.value, props.content.length);
+    })
+
+    const totalItems = computed(()=>{
         return props.content.length;
     })
 
-    watch ([pageSize, currentPage], () => {
-        paginate(currentPage.value, pageSize.value);
+    paginate();
+
+    watch ([pageSize, currentPage, () => props.content], () => {
+        paginate();
     })
 
-    watch(() => props.content, () => {
-        paginate(currentPage.value, pageSize.value);
-    });
-
-    function paginate (page:number, pageSize:number)
+    function paginate ()
     {
-        let endIndex= Math.min(page*pageSize, props.content.length);
-        let startIndex = (page - 1) * pageSize
-        let paginatedContent = props.content.slice(startIndex, endIndex)
+        let paginatedContent = props.content.slice(startIndex.value, endIndex.value)
         emit("paginated", paginatedContent)
     }
 
@@ -65,7 +64,7 @@
 <template>
     <div>
         <slot name="filter"></slot>
-        Tasks per page 
+        Items per page 
         <select v-model="pageSize" >
             <option value="10">10</option>
             <option value="20">20</option>
@@ -77,7 +76,7 @@
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
             <button @click="lastPage">last</button>
-            Total Tasks: {{ totalTasks }}
+            {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
         </div>
         <slot></slot>
         <div>

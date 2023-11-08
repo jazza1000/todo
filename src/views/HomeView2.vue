@@ -1,28 +1,22 @@
 <script setup lang="ts">  
     import Paginator from '@/components/Paginator.vue';
-    import { computed, ref, watch } from 'vue';
+    import { ref } from 'vue';
     import { useTaskStore } from '@/store/task';
     import { storeToRefs } from 'pinia';
-    import { dateToISOString, stringToDate } from '@/mappers/date';
     import type Task from '@/types/Task';
     import TaskFilterer from '@/components/task/TaskFilterer.vue';
-
+    
     const taskStore = useTaskStore()
     const { tasks } = storeToRefs(taskStore)
-    console.log("tasks", tasks.value.length)
 
-    const filteredTasks = ref(tasks.value.map(x => x));
-    const paginatedTasks = ref(filteredTasks.value.map(x => x)); 
-
-    console.log("filtered tasks", filteredTasks.value.length)
+    const filteredTasks = ref<Task[]>(tasks.value)
+    const paginatedTasks = ref<Task[]>(tasks.value)
 
     function setFilteredTasks(newFilteredTasks: Task[]) {
-        console.log("new filtered tasks", newFilteredTasks.length)
         filteredTasks.value = newFilteredTasks
     }
 
     function setPaginatedTasks(newPaginatedTasks: Task[]) {
-        console.log("paginated Tasks", newPaginatedTasks.length)
         paginatedTasks.value = newPaginatedTasks
     }
 
@@ -35,32 +29,32 @@
     </router-link> 
 
     <Paginator
-        :content="filteredTasks"
-        @paginated="setPaginatedTasks"
+      :content="filteredTasks"
+      @paginated="setPaginatedTasks"
     >
-        <TaskFilterer
-          #filter
-          :content="tasks"
-          @filtered="setFilteredTasks"
-        >
-        </TaskFilterer>
+      <TaskFilterer
+        #filter
+        :content="tasks"
+        @filtered="setFilteredTasks"
+      >
+      </TaskFilterer>
         <div class="table">
-            <table>
+          <table>
             <thead>
-            <tr>
+              <tr>
                 <th>Title</th>
                 <th>Description</th>
                 <th>Assigned</th>
                 <th>Due Date</th>
                 <th>Completed Date</th>
                 <th>Actions</th>
-            </tr>
+              </tr>
             </thead>
             <tbody>
-            <tr 
+              <tr 
                 v-for="task in paginatedTasks"
                 :key="task.id"
-            >
+              >
                 <td>{{task.title}}</td>
                 <td>{{task.description}}</td>
                 <td>{{task.assigned}}</td>
@@ -73,10 +67,10 @@
                     Edit
                 </router-link> 
                 <a href="#">delete</a></td>
-            </tr>
+              </tr>
             </tbody>
         </table>
-    </div>
+      </div>
     </Paginator>
   </main>
 </template>
