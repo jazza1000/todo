@@ -9,6 +9,7 @@
         content: Task[]
     }>()
 
+    console.log(`got ${props.content.length} tasks to filter`)
     const emit = defineEmits(['filtered']);
     const now = new Date();
     const future = new Date();
@@ -17,7 +18,6 @@
     const search = ref('')
     const dateFrom =ref(dateToISOString(now))
     const dateTo = ref(dateToISOString(future));
-
     const isDateFilter = ref(false);
 
     watch ([search],async ([newSearch])=>{

@@ -5,23 +5,27 @@
     import { storeToRefs } from 'pinia';
     import { dateToISOString, stringToDate } from '@/mappers/date';
     import type Task from '@/types/Task';
-import TaskFilterer from '@/components/task/TaskFilterer.vue';
+    import TaskFilterer from '@/components/task/TaskFilterer.vue';
 
     const taskStore = useTaskStore()
     const { tasks } = storeToRefs(taskStore)
     console.log("tasks", tasks.value.length)
-    const filteredTasks = ref(tasks); 
-    const displayedTasks = ref(filteredTasks.value.map(obj=>({...obj}))); //note need to copy to new array
+
+    const filteredTasks = ref(tasks.value.map(x => x));
+    const paginatedTasks = ref(filteredTasks.value.map(x => x)); 
 
     console.log("filtered tasks", filteredTasks.value.length)
+
     function setFilteredTasks(newFilteredTasks: Task[]) {
         console.log("new filtered tasks", newFilteredTasks.length)
-        displayedTasks.value = newFilteredTasks
+        filteredTasks.value = newFilteredTasks
     }
 
-    function setDisplayedTasks(newDisplayedTasks: Task[]) {
-        displayedTasks.value = newDisplayedTasks
+    function setPaginatedTasks(newPaginatedTasks: Task[]) {
+        console.log("paginated Tasks", newPaginatedTasks.length)
+        paginatedTasks.value = newPaginatedTasks
     }
+
 </script>
 
 <template>
@@ -32,12 +36,13 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
 
     <Paginator
         :content="filteredTasks"
-        @paginated="setDisplayedTasks"
+        @paginated="setPaginatedTasks"
     >
         <TaskFilterer
-            :content="tasks"
-            @filtered="setFilteredTasks"
-            #filter>
+          #filter
+          :content="tasks"
+          @filtered="setFilteredTasks"
+        >
         </TaskFilterer>
         <div class="table">
             <table>
@@ -53,7 +58,7 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
             </thead>
             <tbody>
             <tr 
-                v-for="task in displayedTasks"
+                v-for="task in paginatedTasks"
                 :key="task.id"
             >
                 <td>{{task.title}}</td>
@@ -73,7 +78,6 @@ import TaskFilterer from '@/components/task/TaskFilterer.vue';
         </table>
     </div>
     </Paginator>
-    
   </main>
 </template>
 

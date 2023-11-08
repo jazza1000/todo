@@ -1,8 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref, toRef, type Ref, watch } from 'vue';
-    import { useTaskStore } from '@/store/task';
-    import { storeToRefs } from 'pinia';
-    import { dateToISOString, stringToDate } from '@/mappers/date';
+    import { computed, ref, toRef, watch } from 'vue';
 
     const props = defineProps<{
         content: Object[]
@@ -10,29 +7,31 @@
 
     const emit = defineEmits(['paginated']);
 
-    const content = toRef(props.content)
     const pageSize = ref(10);
     const currentPage = ref(1);
-   
     paginate(1, pageSize.value);
 
     const contentCount = computed(()=>{
-        return content.value.length;
+        return props.content.length;
     })
 
     const totalPages = computed(()=>{
-        return Math.ceil( content.value.length/ pageSize.value);
+        return Math.ceil( props.content.length/ pageSize.value);
     })
 
-    watch ([pageSize, currentPage], x => {
+    watch ([pageSize, currentPage], () => {
         paginate(currentPage.value, pageSize.value);
     })
 
+    watch(() => props.content, () => {
+        paginate(currentPage.value, pageSize.value);
+    });
+
     function paginate (page:number, pageSize:number)
     {
-        let endIndex= Math.min(page*pageSize, content.value.length);
+        let endIndex= Math.min(page*pageSize, props.content.length);
         let startIndex = (page - 1) * pageSize
-        let paginatedContent = content.value.slice(startIndex, endIndex)
+        let paginatedContent = props.content.slice(startIndex, endIndex)
         emit("paginated", paginatedContent)
     }
 
