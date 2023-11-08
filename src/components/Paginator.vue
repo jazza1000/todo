@@ -19,13 +19,9 @@
         return Math.ceil( props.content.length/ pageSize.value);
     })
 
-    watch ([pageSize, currentPage], () => {
+    watch ([pageSize, currentPage, () => props.content], () => {
         paginate(currentPage.value, pageSize.value);
     })
-
-    watch(() => props.content, () => {
-        paginate(currentPage.value, pageSize.value);
-    });
 
     function paginate (page:number, pageSize:number)
     {

@@ -1,28 +1,22 @@
 <script setup lang="ts">  
     import Paginator from '@/components/Paginator.vue';
-    import { computed, ref, watch } from 'vue';
     import { useTaskStore } from '@/store/task';
     import { storeToRefs } from 'pinia';
-    import { dateToISOString, stringToDate } from '@/mappers/date';
     import type Task from '@/types/Task';
     import TaskFilterer from '@/components/task/TaskFilterer.vue';
+    import { ref } from 'vue';
 
     const taskStore = useTaskStore()
     const { tasks } = storeToRefs(taskStore)
-    console.log("tasks", tasks.value.length)
 
-    const filteredTasks = ref(tasks.value.map(x => x));
-    const paginatedTasks = ref(filteredTasks.value.map(x => x)); 
-
-    console.log("filtered tasks", filteredTasks.value.length)
+    const filteredTasks = ref<Task[]>(tasks.value)
+    const paginatedTasks = ref<Task[]>(tasks.value)
 
     function setFilteredTasks(newFilteredTasks: Task[]) {
-        console.log("new filtered tasks", newFilteredTasks.length)
         filteredTasks.value = newFilteredTasks
     }
 
     function setPaginatedTasks(newPaginatedTasks: Task[]) {
-        console.log("paginated Tasks", newPaginatedTasks.length)
         paginatedTasks.value = newPaginatedTasks
     }
 
