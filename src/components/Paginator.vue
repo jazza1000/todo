@@ -11,7 +11,7 @@
     const currentPage = ref(1);
 
     const totalPages = computed(()=>{
-        return Math.ceil( props.content.length/ pageSize.value);
+        return Math.max(Math.ceil( props.content.length/ pageSize.value), 1);
     })
 
     const startIndex = computed(()=>{
@@ -76,7 +76,9 @@
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
             <button @click="lastPage">last</button>
-            {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
+            <div v-if="totalItems">
+                {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
+            </div>
         </div>
         <slot></slot>
         <div>
