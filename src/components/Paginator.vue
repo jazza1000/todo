@@ -38,7 +38,7 @@
         currentPage.value = 1
     })
 
-    watch ([currentPage, () => props.content], () => {
+    watch ([currentPage, pageSize, () => props.content], () => {
         paginate();
     })
 
