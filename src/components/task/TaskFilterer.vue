@@ -21,20 +21,23 @@
     const isDateFilter = ref(false);
 
     watch ([search],async ([newSearch])=>{
-        let content = changeData(newSearch);
-        emit('filtered', content)
+         changeData(newSearch);
+        
     })
 
     function changeData(newSearch:string)
     {
+        let content =[]
         if (isDateFilter.value)
-            return props.content.filter(x=>
+             content= props.content.filter(x=>
                 (x.description.includes(newSearch) || x.title.includes(newSearch))      
                 &&  (x.dueDate && dateTo.value && x.dueDate  <  stringToDate(dateTo.value)! && x.dueDate > stringToDate(dateFrom.value)!)
                 )
         else
-            return props.content.filter(x=>
+            content= props.content.filter(x=>
                 (x.description.includes(newSearch) || x.title.includes(newSearch)) )
+
+        emit('filtered', content)
     }
 </script>
 

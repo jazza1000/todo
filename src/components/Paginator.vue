@@ -19,6 +19,10 @@
         return Math.ceil( props.content.length/ pageSize.value);
     })
 
+    const totalTasks = computed(()=>{
+        return props.content.length;
+    })
+
     watch ([pageSize, currentPage], () => {
         paginate(currentPage.value, pageSize.value);
     })
@@ -73,6 +77,7 @@
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
             <button @click="lastPage">last</button>
+            Total Tasks: {{ totalTasks }}
         </div>
         <slot></slot>
         <div>
