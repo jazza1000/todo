@@ -11,15 +11,15 @@
     const currentPage = ref(1);
 
     const totalPages = computed(()=>{
-        return Math.ceil( props.content.length/ pageSize.value);
-    })
-
-    const startIndex = computed(()=>{
-        return (currentPage.value - 1) * pageSize.value
+        return Math.max(Math.ceil( props.content.length/ pageSize.value), 1);
     })
 
     const endIndex = computed(()=>{
         return Math.min(currentPage.value * pageSize.value, props.content.length);
+    })
+
+    const startIndex = computed(()=>{
+        return Math.min((currentPage.value - 1) * pageSize.value, )
     })
 
     const totalItems = computed(()=>{
@@ -34,6 +34,9 @@
 
     function paginate ()
     {
+        if (currentPage.value > totalPages.value){
+            currentPage.value = totalPages.value
+        }
         let paginatedContent = props.content.slice(startIndex.value, endIndex.value)
         emit("paginated", paginatedContent)
     }
@@ -76,7 +79,9 @@
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
             <button @click="lastPage">last</button>
-            {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
+            <div v-if="totalItems">
+                {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
+            </div>
         </div>
         <slot></slot>
         <div>

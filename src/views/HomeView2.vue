@@ -38,8 +38,8 @@
         @filtered="setFilteredTasks"
       >
       </TaskFilterer>
-        <div class="table">
-          <table>
+        <div v-if="paginatedTasks.length" class="table" >
+          <table >
             <thead>
               <tr>
                 <th>Title</th>
@@ -71,6 +71,9 @@
             </tbody>
         </table>
       </div>
+      <div v-else class="no-results">
+          No results
+      </div>
     </Paginator>
   </main>
 </template>
@@ -89,5 +92,10 @@
   .table {
     border-style: groove;
     padding: 5px;
+  }
+
+  .no-results {
+    text-align: center;
+    margin-bottom: 2em;
   }
 </style>
