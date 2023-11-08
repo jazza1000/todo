@@ -44,9 +44,6 @@
 
     function paginate ()
     {
-        if (currentPage.value > totalPages.value){
-            currentPage.value = totalPages.value
-        }
         let paginatedContent = props.content.slice(startIndex.value, endIndex.value)
         emit("paginated", paginatedContent)
     }
@@ -59,13 +56,13 @@
     function nextPage()
     {
         if (currentPage.value<totalPages.value)
-            currentPage.value = currentPage.value+1;
+            currentPage.value++;
     }
 
     function prevPage()
     {
-    if (currentPage.value>1)
-        currentPage.value = currentPage.value-1;
+        if (currentPage.value>1)
+            currentPage.value--;
     }
 
     function lastPage()

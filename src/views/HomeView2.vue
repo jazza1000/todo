@@ -32,43 +32,44 @@
       :content="filteredTasks"
       @paginated="setPaginatedTasks"
     >
-      <TaskFilterer
-        #filter
-        :content="tasks"
-        @filtered="setFilteredTasks"
-      >
-      </TaskFilterer>
-        <div v-if="paginatedTasks.length" class="table" >
-          <table >
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Assigned</th>
-                <th>Due Date</th>
-                <th>Completed Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr 
-                v-for="task in paginatedTasks"
-                :key="task.id"
-              >
-                <td>{{task.title}}</td>
-                <td>{{task.description}}</td>
-                <td>{{task.assigned}}</td>
-                <td>{{task.dueDate?.toLocaleDateString()}}</td>
-                <td>{{task.completedDate?.toLocaleDateString()}}</td>
-                <td>
-                <router-link 
-                    :to="{ name: 'editTask', params: { taskId: task.id }}"
-                    >
-                    Edit
-                </router-link> 
-                <a href="#">delete</a></td>
-              </tr>
-            </tbody>
+      <template #filter>
+        <TaskFilterer
+          :content="tasks"
+          @filtered="setFilteredTasks"
+        >
+        </TaskFilterer>
+      </template>
+      <div v-if="paginatedTasks.length" class="table" >
+        <table >
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Assigned</th>
+              <th>Due Date</th>
+              <th>Completed Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr 
+              v-for="task in paginatedTasks"
+              :key="task.id"
+            >
+              <td>{{task.title}}</td>
+              <td>{{task.description}}</td>
+              <td>{{task.assigned}}</td>
+              <td>{{task.dueDate?.toLocaleDateString()}}</td>
+              <td>{{task.completedDate?.toLocaleDateString()}}</td>
+              <td>
+              <router-link 
+                  :to="{ name: 'editTask', params: { taskId: task.id }}"
+                  >
+                  Edit
+              </router-link> 
+              <a href="#">delete</a></td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <div v-else class="no-results">
