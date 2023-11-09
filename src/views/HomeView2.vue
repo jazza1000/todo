@@ -1,5 +1,5 @@
 <script setup lang="ts">  
-    import Paginator from '@/components/Paginator.vue';
+    import ContentPaginator from '@/components/ContentPaginator.vue';
     import { ref } from 'vue';
     import { useTaskStore } from '@/store/task';
     import { storeToRefs } from 'pinia';
@@ -28,7 +28,7 @@
       Create Task
     </router-link> 
 
-    <Paginator
+    <ContentPaginator
       :content="filteredTasks"
       @paginated="setPaginatedTasks"
     >
@@ -71,7 +71,7 @@
             </tbody>
         </table>
       </div>
-    </Paginator>
+    </ContentPaginator>
   </main>
 </template>
 

@@ -12,8 +12,8 @@ export const useAuthStore = defineStore('auth', () => {
 
     const users = usersData.data;
 
-    async function setAuthenticatedUser(userAuthData: UserAuthData) {
-        const user = users.find(u => u.username == userAuthData.username && u.password == userAuthData.password)
+    function setAuthenticatedUser(userAuthData: UserAuthData) {
+        const user =  users.find(u => u.username == userAuthData.username && u.password == userAuthData.password)
         if (user) {
             authenticatedUser.value = {
                 username: user.username
