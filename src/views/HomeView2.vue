@@ -1,5 +1,5 @@
 <script setup lang="ts">  
-    import Paginator from '@/components/Paginator.vue';
+    import ContentPaginator from '@/components/ContentPaginator.vue';
     import { ref } from 'vue';
     import { useTaskStore } from '@/store/task';
     import { storeToRefs } from 'pinia';
@@ -28,7 +28,7 @@
       Create Task
     </router-link> 
 
-    <Paginator
+    <ContentPaginator
       :content="filteredTasks"
       @paginated="setPaginatedTasks"
     >
@@ -38,8 +38,8 @@
         @filtered="setFilteredTasks"
       >
       </TaskFilterer>
-        <div v-if="paginatedTasks.length" class="table" >
-          <table >
+        <div class="table">
+          <table>
             <thead>
               <tr>
                 <th>Title</th>
@@ -71,10 +71,7 @@
             </tbody>
         </table>
       </div>
-      <div v-else class="no-results">
-          No results
-      </div>
-    </Paginator>
+    </ContentPaginator>
   </main>
 </template>
 
@@ -92,10 +89,5 @@
   .table {
     border-style: groove;
     padding: 5px;
-  }
-
-  .no-results {
-    text-align: center;
-    margin-bottom: 2em;
   }
 </style>

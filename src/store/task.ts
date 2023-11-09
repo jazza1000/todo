@@ -27,7 +27,7 @@ export const useTaskStore = defineStore('task', () => {
 
     function replaceTask(task: Task){
         console.log(task)
-        let index = tasks.value.findIndex(t => t.id === task.id)
+        const index = tasks.value.findIndex(t => t.id === task.id)
         if (index === -1) return;
         tasks.value[index] = task
     }

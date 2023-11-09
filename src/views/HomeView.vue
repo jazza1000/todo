@@ -12,7 +12,6 @@
   const pageSize = ref(10);
   const filteredTasks =ref(tasks.value.map(obj=>({...obj}))); //note need to copy to new array
   let tasklist = pageTasks(1,pageSize.value);
-  let allTasks = tasks;
   let currentPage =ref(1);
   const now = new Date();
   const future = new Date()
@@ -32,9 +31,9 @@
     return Math.ceil( filteredTasks.value.length/ pageSize.value);
   })
 
-  watch ([search,pageSize, currentPage],async ([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
+  watch ([search,pageSize, currentPage], ([newSearch, newPageSize, newCurrentPage],[prevSearch, prevPageSize, preCurrentPage])=>{
 
-    changeData(newSearch, newCurrentPage,preCurrentPage, newPageSize);
+      changeData(newSearch, newCurrentPage,preCurrentPage, newPageSize);
     
   })
 
@@ -101,12 +100,12 @@
   <main>
     <div class="search">
       <div>
-        Search: <input type="text" v-model="search" />
+        Search: <input v-model="search" type="text" />
       </div>
       <div>
-        Date From: <input type="datetime-local" v-model="dateFrom" />
-        Date To: <input type="datetime-local" v-model="dateTo" />
-        <input type="checkbox" v-model="isDateFilter" @change="changeData(search,currentPage,currentPage,pageSize)" />apply date filter
+        Date From: <input v-model="dateFrom" type="datetime-local" />
+        Date To: <input v-model="dateTo" type="datetime-local" />
+        <input v-model="isDateFilter" type="checkbox" @change="changeData(search,currentPage,currentPage,pageSize)" />apply date filter
       </div>
     </div>
 

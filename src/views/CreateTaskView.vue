@@ -21,9 +21,9 @@
         completedDate: true
     }
 
-    function createTask(taskToCreate: Task){
+    async function createTask(taskToCreate: Task){
         taskStore.addTask(taskToCreate)
-        router.push('/')
+        await router.push('/')
     }
 </script>
 
