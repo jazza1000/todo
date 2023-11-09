@@ -1,25 +1,53 @@
 <script setup lang="ts">  
-    import Paginator from '@/components/Paginator.vue';
-    import { ref } from 'vue';
-    import { useTaskStore } from '@/store/task';
-    import { storeToRefs } from 'pinia';
-    import type Task from '@/types/Task';
-    import TaskFilterer from '@/components/task/TaskFilterer.vue';
+  import Paginator from '@/components/Paginator.vue';
+  import TaskFilterer from '@/components/task/TaskFilterer.vue';
+  import { ref, watch } from 'vue';
+  import { useTaskStore } from '@/store/task';
+  import router from '@/router'
+  import { storeToRefs } from 'pinia';
+  import { useRoute } from 'vue-router';
     
-    const taskStore = useTaskStore()
-    const { tasks } = storeToRefs(taskStore)
+  const props = defineProps<{
+    page?: number,
+    pageSize?: number,
+    search?: string
+  }>()
 
-    const filteredTasks = ref<Task[]>(tasks.value)
-    const paginatedTasks = ref<Task[]>(tasks.value)
+  const taskStore = useTaskStore()
+  const { totalTasks, tasks } = storeToRefs(taskStore)
+  const route = useRoute();
 
-    function setFilteredTasks(newFilteredTasks: Task[]) {
-        filteredTasks.value = newFilteredTasks
-    }
+  const currentPage = ref<number>(props.page ? props.page : 1)
+  const currentPageSize = ref(props.pageSize ? props.pageSize : 10)
+  const currentSearch = ref<string | undefined>(props.search)
 
-    function setPaginatedTasks(newPaginatedTasks: Task[]) {
-        paginatedTasks.value = newPaginatedTasks
-    }
+  watch([() => route.query], () => {
+    currentPage.value = props.page ? props.page : 1
+    currentPageSize.value = props.pageSize ? props.pageSize : 10
+    currentSearch.value = props.search
+    taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value)
+  })
 
+  function newPage(page: number, pageSize: number) {
+    navigate(page, pageSize, props.search)
+  }
+
+  function newSearch(contains: string) {
+    navigate(1, props.pageSize, contains)
+  }
+
+  function navigate(page: number | undefined, pageSize: number | undefined, contains: string | undefined){
+    router.push({ 
+      name: 'tasks', 
+      query: { 
+        page: page ?? 1,
+        pageSize: pageSize ?? 10,
+        search: contains
+      } 
+    })
+  }
+
+  taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value)
 </script>
 
 <template>
@@ -29,20 +57,24 @@
     </router-link> 
 
     <Paginator
-      :content="filteredTasks"
-      @paginated="setPaginatedTasks"
+      :content="tasks"
+      :page="currentPage"
+      :page-size="currentPageSize"
+      :total-items="totalTasks"
+      @page-changed="newPage"
     >
       <template #filter>
         <TaskFilterer
           :content="tasks"
-          @filtered="setFilteredTasks"
+          @filtered="newSearch"
         >
         </TaskFilterer>
       </template>
-      <div v-if="paginatedTasks.length" class="table" >
+      <div v-if="tasks.length" class="table" >
         <table >
           <thead>
             <tr>
+              <th>Id</th>
               <th>Title</th>
               <th>Description</th>
               <th>Assigned</th>
@@ -53,9 +85,10 @@
           </thead>
           <tbody>
             <tr 
-              v-for="task in paginatedTasks"
+              v-for="task in tasks"
               :key="task.id"
             >
+              <td>{{ task.id }}</td>
               <td>{{task.title}}</td>
               <td>{{task.description}}</td>
               <td>{{task.assigned}}</td>
@@ -78,7 +111,6 @@
     </Paginator>
   </main>
 </template>
-
 
 <style scoped>
   .search {

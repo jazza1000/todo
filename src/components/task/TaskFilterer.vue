@@ -1,12 +1,7 @@
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     import { dateToISOString, stringToDate } from '@/mappers/date';
-    import type Task from '@/types/Task';
     
-    const props = defineProps<{
-        content: Task[]
-    }>()
-
     const emit = defineEmits(['filtered']);
 
     const now = new Date();
@@ -18,22 +13,8 @@
     const dateTo = ref(dateToISOString(future));
     const isDateFilter = ref(false);
 
-    watch ([search, isDateFilter, dateFrom, dateTo],async ([newSearch])=>{
-        changeData(newSearch);
-    })
-
-    function changeData(newSearch:string)
-    {
-        let content = []
-        if (isDateFilter.value)
-             content = props.content.filter(x=>
-                (x.description.includes(newSearch) || x.title.includes(newSearch))      
-                &&  (x.dueDate && dateTo.value && x.dueDate  <  stringToDate(dateTo.value)! && x.dueDate > stringToDate(dateFrom.value)!)
-                )
-        else
-            content = props.content.filter(x=>
-                (x.description.includes(newSearch) || x.title.includes(newSearch)) )
-        emit('filtered', content)
+    function apply() {
+      emit('filtered', search.value)
     }
 </script>
 
@@ -47,5 +28,7 @@
         Date To: <input type="datetime-local" v-model="dateTo"  />
         <input type="checkbox" v-model="isDateFilter" />apply date filter
       </div>
+      <button
+        @click="apply">Apply</button>
     </div>
 </template>

@@ -2,72 +2,65 @@
     import { computed, ref, watch } from 'vue';
 
     const props = defineProps<{
-        content: Object[]
+        page: number;
+        pageSize: number;
+        totalItems: number
     }>()
 
-    const emit = defineEmits(['paginated']);
+    const selectedPageSize = ref(props.pageSize)
 
-    const pageSize = ref(10);
-    const currentPage = ref(1);
+    const emit = defineEmits(['pageChanged']);
+
+    const page = computed(() => {
+        return props.page
+    })
+
+    const pageSize = computed(() => {
+        return props.pageSize
+    })
 
     const totalPages = computed(()=>{
-        return Math.max(Math.ceil( props.content.length/ pageSize.value), 1);
+        return Math.max(Math.ceil(props.totalItems / pageSize.value), 1);
     })
 
     const endIndex = computed(()=>{
-        return Math.min(currentPage.value * pageSize.value, props.content.length);
+        return Math.min(page.value * pageSize.value, props.totalItems);
     })
 
     const startIndex = computed(()=>{
-        return (currentPage.value - 1) * pageSize.value
+        return (page.value - 1) * pageSize.value
     })
 
     const totalItems = computed(()=>{
-        return props.content.length;
+        return props.totalItems;
     })
 
-    paginate();
-
-    watch (pageSize, (_, oldPageSize) => {
-        let oldStartIndex = oldPageSize * (currentPage.value - 1)
-        let newPage = Math.ceil((oldStartIndex + 1) / pageSize.value);
-        currentPage.value = newPage
+    watch(selectedPageSize, () => {
+        let oldStartIndex = pageSize.value * (page.value - 1)
+        let newPage = Math.ceil((oldStartIndex + 1) / selectedPageSize.value);
+        emit('pageChanged', newPage, selectedPageSize.value)
     })
 
-    watch (() => props.content, () => {
-        currentPage.value = 1
-    })
-
-    watch ([currentPage, pageSize, () => props.content], () => {
-        paginate();
-    })
-
-    function paginate ()
-    {
-        let paginatedContent = props.content.slice(startIndex.value, endIndex.value)
-        emit("paginated", paginatedContent)
+    function changePage(newPage: number) {
+        emit('pageChanged', newPage, pageSize.value)
     }
 
-    function firstPage()
-    {
-        currentPage.value = 1;
+    function firstPage() {
+        changePage(1)
     }
 
-    function nextPage()
-    {
-        if (currentPage.value<totalPages.value)
-            currentPage.value++;
+    function nextPage() {
+        if (page.value < totalPages.value)
+            changePage(page.value + 1)
     }
 
-    function prevPage()
-    {
-        if (currentPage.value>1)
-            currentPage.value--;
+    function prevPage() {
+        if (page.value > 1)
+            changePage(page.value - 1)
     }
 
-    function lastPage()
-    {
-        currentPage.value = totalPages.value
+    function lastPage() {
+        changePage(totalPages.value)
     }
 </script>
 
@@ -75,13 +68,13 @@
     <div>
         <slot name="filter"></slot>
         Items per page 
-        <select v-model="pageSize" >
+        <select v-model="selectedPageSize">
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
         </select>
         <div>
-            Page {{ currentPage }} of {{ totalPages }}
+            Page {{ page }} of {{ totalPages }}
             <button @click="firstPage">first</button>
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
@@ -92,7 +85,7 @@
         </div>
         <slot></slot>
         <div>
-            Page {{ currentPage }} of {{ totalPages }}
+            Page {{ page }} of {{ totalPages }}
             <button @click="firstPage">first</button>
             <button @click="prevPage">prev</button>
             <button @click="nextPage">next</button>
