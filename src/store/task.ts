@@ -29,14 +29,14 @@ export const useTaskStore = defineStore('task', () => {
     const page = ref(1);
     const pageSize = ref(10);
     const paginatedTasks = computed(() => {
-        let startIndex = (page.value - 1) * pageSize.value;
-        let endIndex = Math.min(page.value * pageSize.value, filteredTasks.value.length);
+        const startIndex = (page.value - 1) * pageSize.value;
+        const endIndex = Math.min(page.value * pageSize.value, filteredTasks.value.length);
         return  filteredTasks.value.slice(startIndex, endIndex)
     })
 
     const nextId = ref<number>(tasksData.data.reduce((prev, current) => (prev && prev.id > current.id) ? prev : current).id + 1)
 
-    function changePage(newPage: number | undefined, newPageSize: number | undefined, newContains: string | undefined)  {
+    function changePage(newPage: number | undefined, newPageSize: number | undefined, newContains: string | undefined) :void {
         page.value = newPage ?? page.value;
         pageSize.value = newPageSize ?? pageSize.value;
         contains.value = newContains ?? contains.value;
@@ -49,7 +49,7 @@ export const useTaskStore = defineStore('task', () => {
     }
 
     function replaceTask(task: Task){
-        let index = allTasks.value.findIndex(t => t.id === task.id)
+        const index = allTasks.value.findIndex(t => t.id === task.id)
         if (index === -1) return;
         allTasks.value[index] = task
     }
