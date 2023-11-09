@@ -12,8 +12,8 @@
     const { users } = storeToRefs(userStore)
  
     const task = reactive<Task>({
-        id: taskStore.nextId,
-        title: null
+        title: "",
+        description: ""
     })
 
     const permissions = {
