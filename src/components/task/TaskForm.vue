@@ -36,9 +36,9 @@
 
         <label>Description</label>
         <textarea 
+            v-model="task.description"
             placeholder="Description"
-            rows="10"
-            v-model="task.description"></textarea>
+            rows="10"></textarea>
 
         <label>Assignee</label>
         <select v-model="task.assigned">
@@ -48,7 +48,8 @@
             >
                 Unassigned
             </option>
-            <option v-for="user in users" 
+            <option
+v-for="user in users" 
                 :key="user.username" 
                 :value="user.username"
                 :selected="task.assigned === user.username"
@@ -59,16 +60,16 @@
 
         <label>Due Date</label>
         <input 
-            class="date-input"
-            type="datetime-local" 
             v-model="dueDateString"
+            class="date-input" 
+            type="datetime-local"
             :disabled="!props.permissions.dueDate"
         />
         <label>Completed Date</label>
         <input 
+            v-model="completedDateString"
             class="date-input"
             type="datetime-local"
-            v-model="completedDateString"
             :disabled="!props.permissions.completedDate"/>
 
         <button 

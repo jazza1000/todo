@@ -21,12 +21,12 @@
 <template>
     <div class="search">
       <div>
-        Search: <input type="text" v-model="search" />
+        Search: <input v-model="search" type="text" />
       </div>
       <div>
-        Date From: <input type="datetime-local" v-model="dateFrom"   />
-        Date To: <input type="datetime-local" v-model="dateTo"  />
-        <input type="checkbox" v-model="isDateFilter" />apply date filter
+        Date From: <input v-model="dateFrom" type="datetime-local"   />
+        Date To: <input v-model="dateTo" type="datetime-local"  />
+        <input v-model="isDateFilter" type="checkbox" />apply date filter
       </div>
       <button
         @click="apply">Apply</button>

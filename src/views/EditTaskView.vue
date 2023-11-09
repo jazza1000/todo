@@ -20,9 +20,9 @@
         completedDate: false
     }
 
-    function updateTask(updatedTask: Task){
+    async function updateTask(updatedTask: Task){
         taskStore.replaceTask(updatedTask)
-        router.push('/')
+        await router.push('/')
     }
 </script>
 

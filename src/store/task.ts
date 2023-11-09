@@ -20,7 +20,6 @@ export const useTaskStore = defineStore('task', () => {
 
     const contains = ref("");
     const filteredTasks = computed(() => {
-        console.log("filtered recomputed")
         return  allTasks.value.filter(x => x.description.includes(contains.value) || x.title.includes(contains.value)) 
     })
     const totalFilteredTasks = computed(() => {
@@ -39,14 +38,12 @@ export const useTaskStore = defineStore('task', () => {
 
     function changePage(newPage: number | undefined, newPageSize: number | undefined, newContains: string | undefined)  {
         page.value = newPage ?? page.value;
-        console.log(page.value);
         pageSize.value = newPageSize ?? pageSize.value;
         contains.value = newContains ?? contains.value;
-        console.log(contains.value);
     }
 
     function addTask(task: Task){
-        task.id = nextId
+        task.id = nextId.value
         allTasks.value.push(task)
         nextId.value++
     }

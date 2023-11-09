@@ -15,13 +15,13 @@
 
     const validationErrors = ref<string[]>([])
 
-    function handleSubmit() {
+    async function handleSubmit() {
         validateForm();
         if (validationErrors.value.length) return;
         
         authStore.setAuthenticatedUser(user)
         if (isAuthenticated.value){
-            router.push("/")
+           await router.push("/")
         }
         else {
             validationErrors.value.push("Username or password is incorrect")
@@ -44,7 +44,7 @@
     <form>
         <input v-model="user.username" placeholder="Username"/>
         <input v-model="user.password" placeholder="Password" type="password"/>
-        <div v-for="error in validationErrors">
+        <div v-for="error in validationErrors" :key="error">
             {{ error }}
         </div>
         <button

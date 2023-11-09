@@ -12,8 +12,8 @@
     const { users } = storeToRefs(userStore)
  
     const task = reactive<Task>({
-        id: taskStore.nextId,
-        title: null
+        title: "",
+        description: ""
     })
 
     const permissions = {
@@ -21,9 +21,9 @@
         completedDate: true
     }
 
-    function createTask(taskToCreate: Task){
+    async function createTask(taskToCreate: Task){
         taskStore.addTask(taskToCreate)
-        router.push('/')
+        await router.push('/')
     }
 </script>
 

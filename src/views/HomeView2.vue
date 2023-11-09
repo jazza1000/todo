@@ -1,6 +1,6 @@
 <script setup lang="ts">  
-  import Paginator from '@/components/Paginator.vue';
-  import TaskFilterer from '@/components/task/TaskFilterer.vue';
+  import ContentPaginator from '@/components/ContentPaginator.vue';
+  import TaskFilter from '@/components/task/TaskFilter.vue';
   import { ref, watch } from 'vue';
   import { useTaskStore } from '@/store/task';
   import router from '@/router'
@@ -56,7 +56,7 @@
       Create Task
     </router-link> 
 
-    <Paginator
+    <ContentPaginator
       :content="tasks"
       :page="currentPage"
       :page-size="currentPageSize"
@@ -64,11 +64,11 @@
       @page-changed="newPage"
     >
       <template #filter>
-        <TaskFilterer
+        <TaskFilter
           :content="tasks"
           @filtered="newSearch"
         >
-        </TaskFilterer>
+        </TaskFilter>
       </template>
       <div v-if="tasks.length" class="table" >
         <table >
@@ -105,10 +105,7 @@
           </tbody>
         </table>
       </div>
-      <div v-else class="no-results">
-          No results
-      </div>
-    </Paginator>
+    </ContentPaginator>
   </main>
 </template>
 
@@ -125,10 +122,5 @@
   .table {
     border-style: groove;
     padding: 5px;
-  }
-
-  .no-results {
-    text-align: center;
-    margin-bottom: 2em;
   }
 </style>
