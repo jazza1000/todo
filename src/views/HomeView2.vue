@@ -18,7 +18,7 @@
   const route = useRoute();
 
   const currentPage = ref<number>(props.page ? props.page : 1)
-  const currentPageSize = ref(props.pageSize ? props.pageSize : 10)
+  const currentPageSize = ref<number>(props.pageSize ? props.pageSize : 10)
   const currentSearch = ref<string | undefined>(props.search)
 
   watch([() => route.query], () => {
@@ -28,16 +28,16 @@
     taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value)
   })
 
-  function newPage(page: number, pageSize: number) {
-    navigate(page, pageSize, props.search)
+  async function newPage(page: number, pageSize: number) {
+    await navigate(page, pageSize, props.search)
   }
 
-  function newSearch(contains: string) {
-    navigate(1, props.pageSize, contains)
+  async function newSearch(contains: string) {
+    await navigate(1, props.pageSize, contains)
   }
 
-  function navigate(page: number | undefined, pageSize: number | undefined, contains: string | undefined){
-    router.push({ 
+  async function navigate(page: number | undefined, pageSize: number | undefined, contains: string | undefined){
+    await router.push({ 
       name: 'tasks', 
       query: { 
         page: page ?? 1,
