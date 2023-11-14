@@ -3,6 +3,7 @@ import HomeView2 from '../views/HomeView2.vue'
 import EditTaskView from '../views/EditTaskView.vue'
 import CreateTaskView from '../views/CreateTaskView.vue'
 import { useAuthStore } from '@/store/auth'
+import { stringToDate } from '@/mappers/date'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +24,9 @@ const router = createRouter({
       props: route => ({ 
         page: parseInt(route.query.page),
         pageSize: parseInt(route.query.pageSize),
-        search: route.query.search
+        search: route.query.search,
+        dateFrom: stringToDate(route.query.dateFrom),
+        dateTo: stringToDate(route.query.dateTo)
       })
     },
     {

@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "vite",
     "cypress": "npx cypress open",
-    "test": "npx cypress run –headless –spec  cypress\\e2e",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix src",

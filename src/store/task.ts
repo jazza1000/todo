@@ -18,10 +18,32 @@ export const useTaskStore = defineStore('task', () => {
 
     const allTasks = ref(tasksArray)
 
-    const contains = ref("");
+    const contains = ref("");    
+    const dateFrom = ref<Date | undefined>();
+    const dateTo = ref<Date | undefined>();
     const filteredTasks = computed(() => {
-        return  allTasks.value.filter(x => x.description.includes(contains.value) || x.title.includes(contains.value)) 
+        let filteredTasks = allTasks.value;
+        console.log(filteredTasks.length)
+        //filter by search
+        filteredTasks = filteredTasks.filter(x => (!contains.value) || (x.description.includes(contains.value) || x.title.includes(contains.value)));
+
+        //filter by date
+        filteredTasks = filteredTasks.filter(x => { 
+            return(
+                !dateFrom.value 
+                || 
+                (x.dueDate && dateFrom.value <= x.dueDate)
+            )
+                && 
+            (
+                !dateTo.value
+                || 
+                (x.dueDate && dateTo.value >= x.dueDate)
+            )         
+        });
+        return filteredTasks
     })
+
     const totalFilteredTasks = computed(() => {
         return  filteredTasks.value.length
     })
@@ -36,10 +58,17 @@ export const useTaskStore = defineStore('task', () => {
 
     const nextId = ref<number>(tasksData.data.reduce((prev, current) => (prev && prev.id > current.id) ? prev : current).id + 1)
 
-    function changePage(newPage: number | undefined, newPageSize: number | undefined, newContains: string | undefined) :void {
+    function changePage(newPage: number | undefined, 
+        newPageSize: number | undefined,
+        newContains: string | undefined,
+        newDateFrom: Date | undefined,
+        newDateTo: Date|undefined
+        ) :void {
         page.value = newPage ?? page.value;
         pageSize.value = newPageSize ?? pageSize.value;
         contains.value = newContains ?? contains.value;
+        dateFrom.value = newDateFrom;
+        dateTo.value = newDateTo;
     }
 
     function addTask(task: Task){

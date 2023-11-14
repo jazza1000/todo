@@ -6,11 +6,14 @@
   import router from '@/router'
   import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router';
+import { dateToISOString } from '@/mappers/date';
     
   const props = defineProps<{
     page?: number,
     pageSize?: number,
-    search?: string
+    search?: string,
+    dateFrom?: Date,
+    dateTo?: Date
   }>()
 
   const taskStore = useTaskStore()
@@ -20,34 +23,47 @@
   const currentPage = ref<number>(props.page ? props.page : 1)
   const currentPageSize = ref<number>(props.pageSize ? props.pageSize : 10)
   const currentSearch = ref<string | undefined>(props.search)
+  const currentDateFrom = ref<Date | undefined>(props.dateFrom)
+  const currentDateTo = ref<Date | undefined>(props.dateTo)
 
   watch([() => route.query], () => {
-    currentPage.value = props.page ? props.page : 1
-    currentPageSize.value = props.pageSize ? props.pageSize : 10
-    currentSearch.value = props.search
-    taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value)
+    currentPage.value = props.page ? props.page : 1;
+    currentPageSize.value = props.pageSize ? props.pageSize : 10;
+    currentSearch.value = props.search;
+    currentDateFrom.value = props.dateFrom;
+    currentDateTo.value = props.dateTo;
+    taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value, currentDateFrom.value, currentDateTo.value);
   })
 
   async function newPage(page: number, pageSize: number) {
-    await navigate(page, pageSize, props.search)
+    await navigate(page, pageSize, props.search, props.dateFrom, props.dateTo)
   }
 
-  async function newSearch(contains: string) {
-    await navigate(1, props.pageSize, contains)
+  async function newSearch(contains: string, dateFrom: Date, dateTo: Date) {
+    await navigate(1, props.pageSize, contains, dateFrom, dateTo)
   }
 
-  async function navigate(page: number | undefined, pageSize: number | undefined, contains: string | undefined){
+  async function navigate(
+    page: number | undefined, 
+    pageSize: number | undefined, 
+    contains: string | undefined,
+    dateFrom: Date | undefined,
+    dateTo: Date | undefined,
+    ){
+
     await router.push({ 
       name: 'tasks', 
       query: { 
         page: page ?? 1,
         pageSize: pageSize ?? 10,
-        search: contains
+        search: contains,
+        dateFrom: dateToISOString(dateFrom),
+        dateTo: dateToISOString(dateTo)
       } 
     })
   }
 
-  taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value)
+  taskStore.changePage(currentPage.value, currentPageSize.value, currentSearch.value, currentDateFrom.value, currentDateTo.value)
 </script>
 
 <template>

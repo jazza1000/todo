@@ -14,7 +14,12 @@
     const isDateFilter = ref(false);
 
     function apply() {
-      emit('filtered', search.value)
+      let from, to;
+      if (isDateFilter.value) {
+        from = stringToDate(dateFrom.value)
+        to = stringToDate(dateTo.value)
+      }
+      emit('filtered', search.value, from, to)
     }
 </script>
 
@@ -26,7 +31,7 @@
       <div>
         Date From: <input v-model="dateFrom" type="datetime-local" data-test="dateFrom"   />
         Date To: <input v-model="dateTo" type="datetime-local" data-test="dateTo"  />
-        <input v-model="isDateFilter" type="checkbox" />apply date filter
+        <input v-model="isDateFilter" type="checkbox" data-test="dateFilter" />apply date filter
       </div>
       <button
         data-test="apply"
