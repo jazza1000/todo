@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
+    "cypress": "npx cypress open",
+    "test": "npx cypress run –headless –spec  cypress\\e2e",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "lint": "eslint --ext .ts,.vue --ignore-path .gitignore --fix src",
@@ -27,6 +29,7 @@
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/test-utils": "^2.4.1",
     "@vue/tsconfig": "^0.4.0",
+    "cypress": "^13.5.0",
     "eslint": "^8.52.0",
     "eslint-plugin-vue": "^9.18.1",
     "jsdom": "^22.1.0",

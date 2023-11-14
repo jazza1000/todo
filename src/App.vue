@@ -25,9 +25,9 @@
           About
         </RouterLink>
 
-        <div v-if="isAuthenticated">
+        <div v-if="isAuthenticated" data-test="logged-in-user">
           Hello, {{ authenticatedUser!.username }}!
-          <button @click="logout">
+          <button @click="logout" data-test="logout-button">
             Logout
           </button>
         </div>
