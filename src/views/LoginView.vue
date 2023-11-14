@@ -42,14 +42,24 @@
 
 <template>
     <form>
-        <input v-model="user.username" placeholder="Username"/>
-        <input v-model="user.password" placeholder="Password" type="password"/>
-        <div v-for="error in validationErrors" :key="error">
+        <input 
+            v-model="user.username" 
+            placeholder="Username"
+            data-test="username-input"/>
+        <input 
+            v-model="user.password"
+            placeholder="Password"
+            type="password"
+            data-test="password-input"/>
+        <div v-for="error in validationErrors"
+            :key="error"
+            data-test="login-error">
             {{ error }}
         </div>
         <button
             type="button"
             @click="handleSubmit"
+            data-test="login-submit-button"
         >
             Submit
         </button>

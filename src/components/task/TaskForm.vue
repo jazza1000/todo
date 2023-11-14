@@ -32,24 +32,28 @@
 <template>
     <form>
         <label>Title</label>
-        <input v-model="task.title" placeholder="Title">
+        <input 
+            v-model="task.title"
+            placeholder="Title"
+            data-test="title-input">
 
         <label>Description</label>
         <textarea 
             v-model="task.description"
             placeholder="Description"
-            rows="10"></textarea>
+            rows="10"
+            data-test="description-input"></textarea>
 
         <label>Assignee</label>
         <select v-model="task.assigned">
             <option 
                 value=null
-                :selected="!task.assigned"
+                selected=true
             >
                 Unassigned
             </option>
             <option
-v-for="user in users" 
+                v-for="user in users" 
                 :key="user.username" 
                 :value="user.username"
                 :selected="task.assigned === user.username"
