@@ -1,7 +1,6 @@
 import ContentPaginator from '@/components/ContentPaginator.vue';
-import { expect, test, describe, it, assert } from 'vitest';
+import { expect, describe, it } from 'vitest';
 import {mount} from '@vue/test-utils';
-import { usePlugins } from '../utils/plugins/plugins';
 
 //test example here
 describe('ContentPaginator', () => {

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import TaskFilter from '@/components/task/TaskFilter.vue';
-import { expect, test, describe, it, assert } from 'vitest';
+import { expect, test, describe } from 'vitest';
 import {mount} from '@vue/test-utils';
 import { stringToDate, dateToISOString } from '@/mappers/date'
 
