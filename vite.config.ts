@@ -9,9 +9,9 @@ const vitestConfig: VitestUserConfigInterface = {
   test: {
     globals: true,
     environment: "jsdom",
+    setupFiles: ["./src/tests/setup"]
   },
 }
-
 
 export default defineConfig({
   plugins: [vue()],
@@ -22,3 +22,4 @@ export default defineConfig({
   },
   test: vitestConfig.test,
 })
+

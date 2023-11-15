@@ -68,18 +68,45 @@
     <div>
         <slot name="filter"></slot>
         Items per page 
-        <select v-model="selectedPageSize">
+        <select 
+            v-model="selectedPageSize"
+            data-test="selectedPageSize"
+        >
             <option value="10">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
         </select>
         <div>
-            Page {{ page }} of {{ totalPages }}
-            <button @click="firstPage">first</button>
-            <button @click="prevPage">prev</button>
-            <button @click="nextPage">next</button>
-            <button @click="lastPage">last</button>
-            <div v-if="totalItems">
+            <div data-test="totalPages">
+                Page {{ page }} of {{ totalPages }}
+            </div>
+            <button 
+                @click="firstPage" 
+                data-test="firstPage"
+            >   
+                first
+            </button>
+            <button 
+                @click="prevPage"
+                data-test="prevPage"
+            >   
+                prev
+            </button>
+            <button 
+                @click="nextPage"
+                data-test="nextPage"
+            >
+                next
+            </button>
+            <button
+                @click="lastPage"
+                data-test="lastPage"
+            >
+                last
+            </button>
+            <div 
+                v-if="totalItems"
+                data-test="totalItems">
                 {{ startIndex + 1 }} - {{ endIndex}} of {{ totalItems }}
             </div>
         </div>
